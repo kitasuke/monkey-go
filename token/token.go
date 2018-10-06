@@ -16,24 +16,26 @@ const (
 	INT        = "INT"        // 123456
 
 	// Operators
-	ASSIGN   = "="
-	PLUS     = "+"
-	MINUS    = "-"
-	BANG     = "!"
-	ASTERISK = "*"
-	SLASH    = "/"
+	ASSIGN    = "="
+	PLUS      = "+"
+	MINUS     = "-"
+	BANG      = "!"
+	ASTERISK  = "*"
+	SLASH     = "/"
+	EQUAL     = "=="
+	NOT_EQUAL = "!="
 
-	LT = "<"
-	GT = ">"
+	LESS_THAN    = "<"
+	GREATER_THAN = ">"
 
 	// Delimiters
 	COMMA     = ","
 	SEMICOLON = ";"
 
-	LPAREN = "("
-	RPAREN = ")"
-	LBRACE = "{"
-	RBRASE = "}"
+	LEFT_PAREN  = "("
+	RIGHT_PAREN = ")"
+	LEFT_BRACE  = "{"
+	RIGHT_BRASE = "}"
 
 	// Keywords
 	FUNCTION = "FUNCTION"
