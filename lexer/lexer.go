@@ -7,7 +7,7 @@ import (
 type Lexer struct {
 	input        string
 	position     int
-	readPosition int
+	nextPosition int
 	ch           byte
 }
 
@@ -44,17 +44,18 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Type = token.EOF
 	default:
 		if isLetter(l.ch) {
-			tok.Literal = l.lookupIdentifier()
-			tok.Type = token.LookupType(tok.Literal)
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdentifierType(tok.Literal)
 			return tok
 		} else if isDigit(l.ch) {
-			tok.Literal = l.lookupNumber()
+			tok.Literal = l.readNumber()
 			tok.Type = token.INT
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
 		}
 	}
+
 	l.readChar()
 	return tok
 }
@@ -64,16 +65,16 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 func (l *Lexer) readChar() {
-	if l.readPosition >= len(l.input) {
+	if l.nextPosition >= len(l.input) {
 		l.ch = 0
 	} else {
-		l.ch = l.input[l.readPosition]
+		l.ch = l.input[l.nextPosition]
 	}
-	l.position = l.readPosition
-	l.readPosition += 1
+	l.position = l.nextPosition
+	l.nextPosition += 1
 }
 
-func (l *Lexer) lookupIdentifier() string {
+func (l *Lexer) readIdentifier() string {
 	pos := l.position
 	for isLetter(l.ch) {
 		l.readChar()
@@ -81,7 +82,7 @@ func (l *Lexer) lookupIdentifier() string {
 	return l.input[pos:l.position]
 }
 
-func (l *Lexer) lookupNumber() string {
+func (l *Lexer) readNumber() string {
 	pos := l.position
 	for isDigit(l.ch) {
 		l.readChar()
