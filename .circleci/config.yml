@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/kitasuke/monkey-go
+    docker:
+      - image: golang:1.8
+    steps:
+      - checkout
+      - run:
+          name: Run unit tests
+          command: |
+            go test ./...
