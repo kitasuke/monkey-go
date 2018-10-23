@@ -2,10 +2,11 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/kitasuke/monkey-go/ast"
 	"github.com/kitasuke/monkey-go/lexer"
 	"github.com/kitasuke/monkey-go/token"
-	"strconv"
 )
 
 const (
@@ -54,6 +55,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+	p.registerPrefix(token.TRUE, p.parseBoolean)
+	p.registerPrefix(token.FALSE, p.parseBoolean)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
@@ -215,6 +218,10 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 
 	lit.Value = value
 	return lit
+}
+
+func (p *Parser) parseBoolean() ast.Expression {
+	return &ast.Boolean{Token: p.currentToken, Value: p.currentTokenIs(token.TRUE)}
 }
 
 // Token
