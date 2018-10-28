@@ -11,25 +11,25 @@ import (
 
 const (
 	_ int = iota
-	LOWEST
-	EQUALS      // =
-	LESSGREATER // < or >
-	SUM         // +
-	PRODUCT     // *
-	PREFIX      // -X or !X
-	CALL        // myFunction(X)
+	Lowest
+	Equals        // =
+	LessOrGreater // < or >
+	Sum           // +
+	Product       // *
+	Prefix        // -X or !X
+	Call          // myFunction(X)
 )
 
 var precedences = map[token.TokenType]int{
-	token.Equal:       EQUALS,
-	token.NotEqual:    EQUALS,
-	token.LessThan:    LESSGREATER,
-	token.GreaterThan: LESSGREATER,
-	token.Plus:        SUM,
-	token.Minus:       SUM,
-	token.Slash:       PRODUCT,
-	token.Asterisk:    PRODUCT,
-	token.LeftParen:   CALL,
+	token.Equal:       Equals,
+	token.NotEqual:    Equals,
+	token.LessThan:    LessOrGreater,
+	token.GreaterThan: LessOrGreater,
+	token.Plus:        Sum,
+	token.Minus:       Sum,
+	token.Slash:       Product,
+	token.Asterisk:    Product,
+	token.LeftParen:   Call,
 }
 
 type (
@@ -130,7 +130,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 
 	p.nextToken()
 
-	stmt.Value = p.parseExpression(LOWEST)
+	stmt.Value = p.parseExpression(Lowest)
 
 	if p.peekTokenIs(token.Semicolon) {
 		p.nextToken()
@@ -143,7 +143,7 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
 	p.nextToken()
 
-	stmt.ReturnValue = p.parseExpression(LOWEST)
+	stmt.ReturnValue = p.parseExpression(Lowest)
 
 	if p.peekTokenIs(token.Semicolon) {
 		p.nextToken()
@@ -155,7 +155,7 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.currentToken}
 
-	stmt.Expression = p.parseExpression(LOWEST)
+	stmt.Expression = p.parseExpression(Lowest)
 
 	if p.peekTokenIs(token.Semicolon) {
 		p.nextToken()
@@ -172,7 +172,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 
 	p.nextToken()
 
-	expression.Right = p.parseExpression(PREFIX)
+	expression.Right = p.parseExpression(Prefix)
 	return expression
 }
 
@@ -192,7 +192,7 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 func (p *Parser) parseGroupedExpression() ast.Expression {
 	p.nextToken()
 
-	exp := p.parseExpression(LOWEST)
+	exp := p.parseExpression(Lowest)
 
 	if !p.expectPeek(token.RightParen) {
 		return nil
@@ -209,7 +209,7 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	}
 
 	p.nextToken()
-	expression.Condition = p.parseExpression(LOWEST)
+	expression.Condition = p.parseExpression(Lowest)
 
 	if !p.expectPeek(token.RightParen) {
 		return nil
@@ -355,12 +355,12 @@ func (p *Parser) parseCallArguments() []ast.Expression {
 	}
 
 	p.nextToken()
-	args = append(args, p.parseExpression(LOWEST))
+	args = append(args, p.parseExpression(Lowest))
 
 	for p.peekTokenIs(token.Comma) {
 		p.nextToken()
 		p.nextToken()
-		args = append(args, p.parseExpression(LOWEST))
+		args = append(args, p.parseExpression(Lowest))
 	}
 
 	if !p.expectPeek(token.RightParen) {
@@ -397,7 +397,7 @@ func (p *Parser) peekPrecedence() int {
 		return p
 	}
 
-	return LOWEST
+	return Lowest
 }
 
 func (p *Parser) currentPrecedence() int {
@@ -405,7 +405,7 @@ func (p *Parser) currentPrecedence() int {
 		return p
 	}
 
-	return LOWEST
+	return Lowest
 }
 
 // Error

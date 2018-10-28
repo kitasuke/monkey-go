@@ -9,13 +9,13 @@ import (
 	"github.com/kitasuke/monkey-go/parser"
 )
 
-const PROMPT = ">> "
+const Prompt = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 
 	for {
-		fmt.Printf(PROMPT)
+		fmt.Printf(Prompt)
 		scanned := scanner.Scan()
 		if !scanned {
 			return
