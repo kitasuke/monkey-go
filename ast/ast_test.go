@@ -1,21 +1,22 @@
 package ast
 
 import (
-	"github.com/kitasuke/monkey-go/token"
 	"testing"
+
+	"github.com/kitasuke/monkey-go/token"
 )
 
 func TestString(t *testing.T) {
 	program := &Program{
 		Statements: []Statement{
 			&LetStatement{
-				Token: token.Token{Type: token.LET, Literal: "let"},
+				Token: token.Token{Type: token.Let, Literal: "let"},
 				Name: &Identifier{
-					Token: token.Token{Type: token.IDENTIFIER, Literal: "mayVar"},
+					Token: token.Token{Type: token.Identifier, Literal: "mayVar"},
 					Value: "myVar",
 				},
 				Value: &Identifier{
-					Token: token.Token{Type: token.IDENTIFIER, Literal: "anotherVar"},
+					Token: token.Token{Type: token.Identifier, Literal: "anotherVar"},
 					Value: "anotherVar",
 				},
 			},

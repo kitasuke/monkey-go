@@ -28,43 +28,43 @@ func (l *Lexer) NextToken() token.Token {
 			ch := l.ch
 			l.readChar()
 			literal := string(ch) + string(l.ch)
-			tok = token.Token{Type: token.EQUAL, Literal: literal}
+			tok = token.Token{Type: token.Equal, Literal: literal}
 		} else {
-			tok = newToken(token.ASSIGN, l.ch)
+			tok = newToken(token.Assign, l.ch)
 		}
 	case '+':
-		tok = newToken(token.PLUS, l.ch)
+		tok = newToken(token.Plus, l.ch)
 	case '-':
-		tok = newToken(token.MINUS, l.ch)
+		tok = newToken(token.Minus, l.ch)
 	case '!':
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
 			literal := string(ch) + string(l.ch)
-			tok = token.Token{Type: token.NOT_EQUAL, Literal: literal}
+			tok = token.Token{Type: token.NotEqual, Literal: literal}
 		} else {
-			tok = newToken(token.BANG, l.ch)
+			tok = newToken(token.Bang, l.ch)
 		}
 	case '*':
-		tok = newToken(token.ASTERISK, l.ch)
+		tok = newToken(token.Asterisk, l.ch)
 	case '/':
-		tok = newToken(token.SLASH, l.ch)
+		tok = newToken(token.Slash, l.ch)
 	case '<':
-		tok = newToken(token.LESS_THAN, l.ch)
+		tok = newToken(token.LessThan, l.ch)
 	case '>':
-		tok = newToken(token.GREATER_THAN, l.ch)
+		tok = newToken(token.GreaterThan, l.ch)
 	case ',':
-		tok = newToken(token.COMMA, l.ch)
+		tok = newToken(token.Comma, l.ch)
 	case ';':
-		tok = newToken(token.SEMICOLON, l.ch)
+		tok = newToken(token.Semicolon, l.ch)
 	case '(':
-		tok = newToken(token.LEFT_PAREN, l.ch)
+		tok = newToken(token.LeftParen, l.ch)
 	case ')':
-		tok = newToken(token.RIGHT_PAREN, l.ch)
+		tok = newToken(token.RightParen, l.ch)
 	case '{':
-		tok = newToken(token.LEFT_BRACE, l.ch)
+		tok = newToken(token.LeftBrace, l.ch)
 	case '}':
-		tok = newToken(token.RIGHT_BRASE, l.ch)
+		tok = newToken(token.RightBrace, l.ch)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -75,10 +75,10 @@ func (l *Lexer) NextToken() token.Token {
 			return tok
 		} else if isDigit(l.ch) {
 			tok.Literal = l.readNumber()
-			tok.Type = token.INT
+			tok.Type = token.Int
 			return tok
 		} else {
-			tok = newToken(token.ILLEGAL, l.ch)
+			tok = newToken(token.Illegal, l.ch)
 		}
 	}
 

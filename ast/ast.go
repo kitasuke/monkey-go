@@ -45,7 +45,7 @@ func (p *Program) String() string {
 }
 
 type LetStatement struct {
-	Token token.Token // the token.LET token
+	Token token.Token // the token.Let token
 	Name  *Identifier
 	Value Expression
 }
@@ -102,7 +102,7 @@ func (es *ExpressionStatement) String() string {
 }
 
 type Identifier struct {
-	Token token.Token // the token.IDENTIFIER token
+	Token token.Token // the token.Identifier token
 	Value string
 }
 
