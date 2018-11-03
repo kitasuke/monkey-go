@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/kitasuke/monkey-go/evaluator"
 	"github.com/kitasuke/monkey-go/lexer"
 	"github.com/kitasuke/monkey-go/parser"
 )
@@ -31,8 +32,11 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		io.WriteString(out, program.String())
-		io.WriteString(out, "\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
+		}
 	}
 }
 
