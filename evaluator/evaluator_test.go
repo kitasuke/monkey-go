@@ -1,6 +1,7 @@
 package evaluator
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/kitasuke/monkey-go/lexer"
@@ -143,20 +144,20 @@ func TestErrorHandling(t *testing.T) {
 		input           string
 		expectedMessage string
 	}{
-		{"5 + true;", "type mismatch: Integer + Boolean"},
-		{"5 + true; 5;", "type mismatch: Integer + Boolean"},
-		{"-true", "unknown operator: -Boolean"},
-		{"true + false", "unknown operator: Boolean + Boolean"},
-		{"5; true + false; 5", "unknown operator: Boolean + Boolean"},
-		{"if (10 > 1) { true + false; }", "unknown operator: Boolean + Boolean"},
+		{"5 + true;", fmt.Sprintf("%s: %s + %s", typeMissMatchError, object.IntegerObj, object.BooleanObj)},
+		{"5 + true; 5;", fmt.Sprintf("%s: %s + %s", typeMissMatchError, object.IntegerObj, object.BooleanObj)},
+		{"-true", fmt.Sprintf("%s: -%s", unknownOperatorError, object.BooleanObj)},
+		{"true + false", fmt.Sprintf("%s: %s + %s", unknownOperatorError, object.BooleanObj, object.BooleanObj)},
+		{"5; true + false; 5", fmt.Sprintf("%s: %s + %s", unknownOperatorError, object.BooleanObj, object.BooleanObj)},
+		{"if (10 > 1) { true + false; }", fmt.Sprintf("%s: %s + %s", unknownOperatorError, object.BooleanObj, object.BooleanObj)},
 		{`
 			if (10 > 1) {
 				if (10 > 1) {
 					return true + false;
 				}
 			}
-		`, "unknown operator: Boolean + Boolean"},
-		{"foobar", "identifier not found: foobar"},
+		`, fmt.Sprintf("%s: %s + %s", unknownOperatorError, object.BooleanObj, object.BooleanObj)},
+		{"foobar", fmt.Sprintf("%s: %s", identifierNotFoundError, "foobar")},
 	}
 
 	for _, tt := range tests {

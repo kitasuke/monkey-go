@@ -8,6 +8,13 @@ import (
 	"github.com/kitasuke/monkey-go/token"
 )
 
+const (
+	unknownOperatorError    = "unknown operator"
+	typeMissMatchError      = "type mismatch"
+	identifierNotFoundError = "identifier not found"
+	notFunctionError        = "not a function"
+)
+
 var (
 	Null  = &object.Null{}
 	True  = &object.Boolean{Value: true}
@@ -136,7 +143,7 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 	case token.Minus:
 		return evalMinusPrefixOperatorExpression(right)
 	default:
-		return newError("unknown operator: %s%s", operator, right.Type())
+		return newError("%s: %s%s", unknownOperatorError, operator, right.Type())
 	}
 }
 
@@ -149,9 +156,9 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 	case operator == token.NotEqual:
 		return nativeBoolToBooleanObject(left != right)
 	case left.Type() != right.Type():
-		return newError("type mismatch: %s %s %s", left.Type(), operator, right.Type())
+		return newError("%s: %s %s %s", typeMissMatchError, left.Type(), operator, right.Type())
 	default:
-		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+		return newError("%s: %s %s %s", unknownOperatorError, left.Type(), operator, right.Type())
 	}
 }
 
@@ -184,7 +191,7 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 
 func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 	if right.Type() != object.IntegerObj {
-		return newError("unknown operator: -%s", right.Type())
+		return newError("%s: -%s", unknownOperatorError, right.Type())
 	}
 
 	value := right.(*object.Integer).Value
@@ -213,14 +220,14 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 	case token.NotEqual:
 		return nativeBoolToBooleanObject(leftValue != rightValue)
 	default:
-		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+		return newError("%s: %s %s %s", unknownOperatorError, left.Type(), operator, right.Type())
 	}
 }
 
 func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
 	val, ok := env.Get(node.Value)
 	if !ok {
-		return newError("identifier not found: " + node.Value)
+		return newError("%s: %s", identifierNotFoundError, node.Value)
 	}
 	return val
 }
@@ -228,7 +235,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 func applyFunction(fn object.Object, args []object.Object) object.Object {
 	function, ok := fn.(*object.Function)
 	if !ok {
-		return newError("not a function: %s", fn.Type())
+		return newError("%s: %s", notFunctionError, fn.Type())
 	}
 
 	extendedEnv := extendedFunctionEnv(function, args)
