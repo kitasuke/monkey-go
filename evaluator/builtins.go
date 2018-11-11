@@ -1,6 +1,10 @@
 package evaluator
 
-import "github.com/kitasuke/monkey-go/object"
+import (
+	"fmt"
+
+	"github.com/kitasuke/monkey-go/object"
+)
 
 const (
 	BuiltinFuncNameLen   = "len"
@@ -8,6 +12,7 @@ const (
 	BuiltinFuncNameLast  = "last"
 	BuiltinFuncNameRest  = "rest"
 	BuiltinFuncNamePush  = "push"
+	BuiltinFuncNamePuts  = "puts"
 )
 
 var builtins = map[string]*object.Builtin{
@@ -96,6 +101,15 @@ var builtins = map[string]*object.Builtin{
 			newElements[length] = args[1]
 
 			return &object.Array{Elements: newElements}
+		},
+	},
+	BuiltinFuncNamePuts: {
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+
+			return Null
 		},
 	},
 }
