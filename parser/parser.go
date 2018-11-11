@@ -120,13 +120,13 @@ func (p *Parser) parseStatement() ast.Statement {
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.currentToken}
 
-	if !p.setNextTokenIf(token.Identifier) {
+	if !p.expectPeek(token.Identifier) {
 		return nil
 	}
 
 	stmt.Name = &ast.Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
 
-	if !p.setNextTokenIf(token.Assign) {
+	if !p.expectPeek(token.Assign) {
 		return nil
 	}
 
@@ -232,7 +232,7 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 	p.nextToken()
 	exp := p.parseExpression(Lowest)
 
-	if !p.setNextTokenIf(token.RightParen) {
+	if !p.expectPeek(token.RightParen) {
 		return nil
 	}
 
@@ -242,7 +242,7 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 func (p *Parser) parseIfExpression() ast.Expression {
 	expression := &ast.IfExpression{Token: p.currentToken}
 
-	if !p.setNextTokenIf(token.LeftParen) {
+	if !p.expectPeek(token.LeftParen) {
 		return nil
 	}
 
@@ -250,11 +250,11 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	p.nextToken()
 	expression.Condition = p.parseExpression(Lowest)
 
-	if !p.setNextTokenIf(token.RightParen) {
+	if !p.expectPeek(token.RightParen) {
 		return nil
 	}
 
-	if !p.setNextTokenIf(token.LeftBrace) {
+	if !p.expectPeek(token.LeftBrace) {
 		return nil
 	}
 
@@ -264,7 +264,7 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	if p.peekTokenIs(token.Else) {
 		p.nextToken()
 
-		if !p.setNextTokenIf(token.LeftBrace) {
+		if !p.expectPeek(token.LeftBrace) {
 			return nil
 		}
 
@@ -294,13 +294,13 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{Token: p.currentToken}
 
-	if !p.setNextTokenIf(token.LeftParen) {
+	if !p.expectPeek(token.LeftParen) {
 		return nil
 	}
 
 	lit.Parameters = p.parseFunctionParameters()
 
-	if !p.setNextTokenIf(token.LeftBrace) {
+	if !p.expectPeek(token.LeftBrace) {
 		return nil
 	}
 
@@ -330,7 +330,7 @@ func (p *Parser) parseFunctionParameters() []*ast.Identifier {
 		identifiers = append(identifiers, identifier)
 	}
 
-	if !p.setNextTokenIf(token.RightParen) {
+	if !p.expectPeek(token.RightParen) {
 		return nil
 	}
 
@@ -366,7 +366,7 @@ func (p *Parser) parseExpressionList(end token.TokenType) []ast.Expression {
 		list = append(list, p.parseExpression(Lowest))
 	}
 
-	if !p.setNextTokenIf(end) {
+	if !p.expectPeek(end) {
 		return nil
 	}
 
@@ -379,7 +379,7 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	p.nextToken()
 	exp.Index = p.parseExpression(Lowest)
 
-	if !p.setNextTokenIf(token.RightBracket) {
+	if !p.expectPeek(token.RightBracket) {
 		return nil
 	}
 
@@ -414,7 +414,7 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
-func (p *Parser) setNextTokenIf(t token.TokenType) bool {
+func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
 		return true
