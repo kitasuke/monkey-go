@@ -32,6 +32,7 @@ const (
 	// Delimiters
 	Comma     = ","
 	Semicolon = ";"
+	Colon     = ":"
 
 	LeftParen    = "("
 	RightParen   = ")"
