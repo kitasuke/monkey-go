@@ -269,8 +269,23 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`len("")`, 0},
 		{`len("four")`, 4},
 		{`len("hello world")`, 11},
-		{`len(1)`, fmt.Sprintf("argument to `len` not supported, got %s", object.IntegerObj)},
+		{`len(1)`, fmt.Sprintf("argument to %q not supported, got %s", BuiltinFuncNameLen, object.IntegerObj)},
 		{`len("one", "two")`, "wrong number of arguments. got=2, want=1"},
+		{`first([1, 2, 3])`, 1},
+		{`first([])`, nil},
+		{`first(1)`, fmt.Sprintf("argument to %q must be %s, got %s", BuiltinFuncNameFirst, object.ArrayObj, object.IntegerObj)},
+		{`first(1, 2)`, "wrong number of arguments. got=2, want=1"},
+		{`last([1, 2, 3])`, 3},
+		{`last([])`, nil},
+		{`last(1)`, fmt.Sprintf("argument to %q must be %s, got %s", BuiltinFuncNameLast, object.ArrayObj, object.IntegerObj)},
+		{`last(1, 2)`, "wrong number of arguments. got=2, want=1"},
+		{`rest([1, 2, 3])`, []int{2, 3}},
+		{`rest([])`, nil},
+		{`rest(1)`, fmt.Sprintf("argument to %q must be %s, got %s", BuiltinFuncNameRest, object.ArrayObj, object.IntegerObj)},
+		{`rest(1, 2)`, "wrong number of arguments. got=2, want=1"},
+		{`push([], 1)`, []int{1}},
+		{`push(1, 2)`, fmt.Sprintf("argument to %q must be %s, got %s", BuiltinFuncNamePush, object.ArrayObj, object.IntegerObj)},
+		{`push(1)`, "wrong number of arguments. got=1, want=2"},
 	}
 
 	for _, tt := range tests {
@@ -279,6 +294,8 @@ func TestBuiltinFunctions(t *testing.T) {
 		switch expected := tt.expected.(type) {
 		case int:
 			testIntegerObject(t, evaluated, int64(expected))
+		case nil:
+			testNullObject(t, evaluated)
 		case string:
 			errObj, ok := evaluated.(*object.Error)
 			if !ok {
@@ -288,6 +305,21 @@ func TestBuiltinFunctions(t *testing.T) {
 
 			if errObj.Message != expected {
 				t.Errorf("wrong error message. expected=%q, got=%q", expected, errObj.Message)
+			}
+		case []int:
+			array, ok := evaluated.(*object.Array)
+			if !ok {
+				t.Errorf("obj not %s. got=%T (%+v)", object.ArrayObj, evaluated, evaluated)
+				continue
+			}
+			if len(array.Elements) != len(expected) {
+				t.Errorf("wrong num of elements. want=%d, got=%d",
+					len(expected), len(array.Elements))
+				continue
+			}
+
+			for i, element := range expected {
+				testIntegerObject(t, array.Elements[i], int64(element))
 			}
 		}
 	}
