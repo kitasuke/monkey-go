@@ -80,7 +80,7 @@ func (ls *LetStatement) String() string {
 		out.WriteString(ls.Value.String())
 	}
 
-	out.WriteString(";")
+	out.WriteString(token.Semicolon)
 	return out.String()
 }
 
@@ -100,7 +100,7 @@ func (rs *ReturnStatement) String() string {
 		out.WriteString(rs.ReturnValue.String())
 	}
 
-	out.WriteString(";")
+	out.WriteString(token.Semicolon)
 	return out.String()
 }
 
@@ -129,10 +129,10 @@ func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
 func (pe *PrefixExpression) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("(")
+	out.WriteString(token.LeftParen)
 	out.WriteString(pe.Operator)
 	out.WriteString(pe.Right.String())
-	out.WriteString(")")
+	out.WriteString(token.RightParen)
 
 	return out.String()
 }
@@ -149,11 +149,11 @@ func (oe *InfixExpression) TokenLiteral() string { return oe.Token.Literal }
 func (oe *InfixExpression) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("(")
+	out.WriteString(token.LeftParen)
 	out.WriteString(oe.Left.String())
 	out.WriteString(" " + oe.Operator + " ")
 	out.WriteString(oe.Right.String())
-	out.WriteString(")")
+	out.WriteString(token.RightParen)
 
 	return out.String()
 }
@@ -200,9 +200,9 @@ func (ce *CallExpression) String() string {
 	}
 
 	out.WriteString(ce.Function.String())
-	out.WriteString("(")
-	out.WriteString(strings.Join(args, ", "))
-	out.WriteString(")")
+	out.WriteString(token.LeftParen)
+	out.WriteString(strings.Join(args, token.Comma+" "))
+	out.WriteString(token.RightParen)
 
 	return out.String()
 }
@@ -260,9 +260,9 @@ func (fl *FunctionLiteral) String() string {
 	}
 
 	out.WriteString(fl.TokenLiteral())
-	out.WriteString("(")
-	out.WriteString(strings.Join(params, ", "))
-	out.WriteString(") ")
+	out.WriteString(token.LeftParen)
+	out.WriteString(strings.Join(params, token.Comma+" "))
+	out.WriteString(token.RightParen)
 	out.WriteString(fl.Body.String())
 
 	return out.String()
@@ -283,9 +283,9 @@ func (al *ArrayLiteral) String() string {
 		elements = append(elements, el.String())
 	}
 
-	out.WriteString("[")
-	out.WriteString(strings.Join(elements, ", "))
-	out.WriteString("]")
+	out.WriteString(token.LeftBracket)
+	out.WriteString(strings.Join(elements, token.Comma+" "))
+	out.WriteString(token.RightBracket)
 
 	return out.String()
 }
@@ -301,11 +301,12 @@ func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IndexExpression) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("(")
+	out.WriteString(token.LeftParen)
 	out.WriteString(ie.Left.String())
-	out.WriteString("[")
+	out.WriteString(token.LeftBracket)
 	out.WriteString(ie.Index.String())
-	out.WriteString("])")
+	out.WriteString(token.RightBracket)
+	out.WriteString(token.RightParen)
 
 	return out.String()
 }
