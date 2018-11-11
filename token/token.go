@@ -33,10 +33,12 @@ const (
 	Comma     = ","
 	Semicolon = ";"
 
-	LeftParen  = "("
-	RightParen = ")"
-	LeftBrace  = "{"
-	RightBrace = "}"
+	LeftParen    = "("
+	RightParen   = ")"
+	LeftBrace    = "{"
+	RightBrace   = "}"
+	LeftBracket  = "["
+	RightBracket = "]"
 
 	// Keywords
 	Function = "Function"
