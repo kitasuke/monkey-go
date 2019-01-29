@@ -7,22 +7,24 @@ import (
 	"strings"
 
 	"github.com/kitasuke/monkey-go/ast"
+	"github.com/kitasuke/monkey-go/code"
 	"github.com/kitasuke/monkey-go/token"
 )
 
 type ObjectType string
 
 const (
-	IntegerObj     = "Integer"
-	BooleanObj     = "Boolean"
-	NullObj        = "Null"
-	ReturnValueObj = "ReturnValue"
-	ErrorObj       = "Error"
-	FunctionObj    = "Function"
-	StringObj      = "String"
-	BuiltinObj     = "Builtin"
-	ArrayObj       = "Array"
-	HashObj        = "Hash"
+	IntegerObj          = "Integer"
+	BooleanObj          = "Boolean"
+	NullObj             = "Null"
+	ReturnValueObj      = "ReturnValue"
+	ErrorObj            = "Error"
+	FunctionObj         = "Function"
+	StringObj           = "String"
+	BuiltinObj          = "Builtin"
+	ArrayObj            = "Array"
+	HashObj             = "Hash"
+	CompiledFunctionObj = "CompiledFunction"
 )
 
 type HashKey struct {
@@ -176,4 +178,13 @@ func (h *Hash) Inspect() string {
 	out.WriteString(token.RightBrace)
 
 	return out.String()
+}
+
+type CompiledFunction struct {
+	Instructions code.Instructions
+}
+
+func (cf *CompiledFunction) Type() ObjectType { return CompiledFunctionObj }
+func (cf *CompiledFunction) Inspect() string {
+	return fmt.Sprintf("CopiledFunction[%p]", cf)
 }
