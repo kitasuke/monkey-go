@@ -425,32 +425,32 @@ func TestBuiltinFunctions(t *testing.T) {
 		},
 		{`len([1, 2, 3])`, 3},
 		{`len([])`, 0},
-		//{`puts("hello", "world!")`, Null},
-		//{`first([1, 2, 3])`, 1},
-		//{`first()`, Null},
-		//{
-		//	`first(1)`,
-		//	&object.Error{
-		//		Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNameFirst, object.ArrayObj, object.IntegerObj),
-		//	},
-		//},
-		//{`last([1, 2, 3])`, 3},
-		//{`last()`, Null},
-		//{
-		//	`last(1)`,
-		//	&object.Error{
-		//		Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNameLast, object.ArrayObj, object.IntegerObj),
-		//	},
-		//},
-		//{`rest([1, 2, 3])`, []int{2, 3}},
-		//{`rest()`, Null},
-		//{`push([], 1)`, []int{1}},
-		//{
-		//	`push(1, 1)`,
-		//	&object.Error{
-		//		Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNamePush, object.ArrayObj, object.IntegerObj),
-		//	},
-		//},
+		{`puts("hello", "world!")`, Null},
+		{`first([1, 2, 3])`, 1},
+		{`first([])`, Null},
+		{
+			`first(1)`,
+			&object.Error{
+				Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNameFirst, object.ArrayObj, object.IntegerObj),
+			},
+		},
+		{`last([1, 2, 3])`, 3},
+		{`last([])`, Null},
+		{
+			`last(1)`,
+			&object.Error{
+				Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNameLast, object.ArrayObj, object.IntegerObj),
+			},
+		},
+		{`rest([1, 2, 3])`, []int{2, 3}},
+		{`rest([])`, Null},
+		{`push([], 1)`, []int{1}},
+		{
+			`push(1, 1)`,
+			&object.Error{
+				Message: fmt.Sprintf("argument to %q must be %s, got %s", object.BuiltinFuncNamePush, object.ArrayObj, object.IntegerObj),
+			},
+		},
 	}
 
 	runVmTests(t, tests)
