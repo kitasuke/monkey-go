@@ -8,4 +8,4 @@ Monkey programming language from [Writing an interpreter in Go](https://interpre
 
 ## REPL
 
-1. Run `go run main.go` in your terminal
+1. Run `go build -o monkey-go && ./monkey-go` in your terminal
