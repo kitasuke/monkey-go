@@ -25,6 +25,7 @@ const (
 	ArrayObj            = "Array"
 	HashObj             = "Hash"
 	CompiledFunctionObj = "CompiledFunction"
+	ClosureObj          = "Closure"
 )
 
 type HashKey struct {
@@ -189,4 +190,15 @@ type CompiledFunction struct {
 func (cf *CompiledFunction) Type() ObjectType { return CompiledFunctionObj }
 func (cf *CompiledFunction) Inspect() string {
 	return fmt.Sprintf("CopiledFunction[%p]", cf)
+}
+
+type Closure struct {
+	Fn   *CompiledFunction
+	Free []Object
+}
+
+func (c *Closure) Type() ObjectType { return ClosureObj }
+
+func (c *Closure) Inspect() string {
+	return fmt.Sprintf("Closure[%p]", c)
 }
